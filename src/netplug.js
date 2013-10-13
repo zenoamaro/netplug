@@ -4,7 +4,8 @@
 'use strict'
 
 var express = require('express'),
-	http = require('http')
+	http = require('http'),
+	url = require('url')
 
 var Plug = require('./plug')
 
@@ -24,7 +25,6 @@ NetPlug.prototype.listen = function(port) {
 		port = port || DEFAULT_PORT
 	//
 	var server = http.createServer(function(req, res){
-		console.log('Request from `%s` to `%s`', req.socket.remoteAddress, req.url)
 		return self._request.apply(self, arguments)
 	})
 	//
@@ -35,8 +35,11 @@ NetPlug.prototype.listen = function(port) {
 
 NetPlug.prototype._request = function(req, res) {
 	//
-	var url = req.url,
-		plug = this._resources[url]
+	var resource = url.parse(req.url),
+		plug = this._resources[resource.pathname]
+
+	console.log('* Request from `%s` to `%s`', req.socket.remoteAddress, resource.pathname)
+	console.log('* Arguments: ', resource.query.split('&'))
 
 	if (plug)
 		plug._request.apply(plug, arguments)
