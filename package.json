@@ -11,15 +11,8 @@
 	},
 
 	"main": "index.js",
+	"scripts": {},
 
-	"scripts": {
-		"start": "node src/index.js",
-		"test": ""
-	},
-
-	"dependencies": {
-		"express": "*"
-	},
-	"devDependencies": {
-	}
+	"dependencies": {},
+	"devDependencies": {}
 }

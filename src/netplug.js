@@ -8,6 +8,8 @@ var express = require('express'),
 
 var Plug = require('./plug')
 
+var DEFAULT_PORT = 2048
+
 
 function NetPlug(options) {
 	options || (options = {})
@@ -18,7 +20,8 @@ function NetPlug(options) {
 NetPlug.Plug = Plug
 
 NetPlug.prototype.listen = function(port) {
-	var self = this
+	var self = this,
+		port = port || DEFAULT_PORT
 	//
 	var server = http.createServer(function(req, res){
 		console.log('Request from `%s` to `%s`', req.socket.remoteAddress, req.url)
@@ -36,16 +39,14 @@ NetPlug.prototype._request = function(req, res) {
 		plug = this._resources[url]
 
 	if (plug)
-		return plug._request.apply(plug, arguments)
+		plug._request.apply(plug, arguments)
 
-	var error = 'No plug at ' + url
-	console.log(error)
-	res.statusCode = 404
-	res.end(error+'\n')
-}
-
-NetPlug.prototype._routeForResource = function(resource) {
-	return this.root + '/' + resource
+	else {
+		var error = 'No plug at ' + url
+		console.log(error)
+		res.statusCode = 404
+		res.end(error+'\n')
+	}
 }
 
 NetPlug.prototype._makePlug = function(pipe) {
@@ -55,7 +56,7 @@ NetPlug.prototype._makePlug = function(pipe) {
 }
 
 NetPlug.prototype.plug = function(resource, plug) {
-	var route = this._routeForResource(resource),
+	var route = this.root + '/' + resource,
 		plug = this._makePlug(plug)
 	this._resources[route] = plug
 	console.log('Plugged ' + route)

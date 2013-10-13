@@ -1,6 +1,5 @@
 'use strict'
 
-
 function Plug(options) {
 	options || (options = {})
 	this.resource = options.resource
@@ -8,9 +7,7 @@ function Plug(options) {
 }
 
 Plug.prototype._request = function(req, res) {
-	res.writeContinue()
 	return this.pipe.apply(this, arguments)
 }
-
 
 module.exports = Plug

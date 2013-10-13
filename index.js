@@ -1,1 +1,4 @@
-module.exports = require('./src/netplug')
+module.exports = {
+	Plug: require('./src/plug'),
+	NetPlug: require('./src/netplug'),
+}
